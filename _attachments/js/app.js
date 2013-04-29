@@ -1,29 +1,37 @@
 
 jQuery(document).ready(function() {
+    var currentLat,currentLng;
+    
+    var path = unescape(document.location.pathname).split('/'),        
+        design   = "tour",                    ///path[3],
+        db   = $.couch.db("tour");             
+         //$.couch.db(path[1]);  //$.couch.db(document.location.hostname);  
+
+    function refreshPage() {
+        $.mobile.changePage(window.location.href, {
+            allowSamePageTransition: true,
+            transition: 'none',
+            showLoadMsg: false,
+            reloadPage: true
+        });
+    }
     
      $('#saveLocation').click(function (event) { 
          event.preventDefault();
-         alert("bingo");
-         
-         
+         $('#newLocation').submit();
+         $.mobile.changePage("#locationPage");
      });
-                 
-    if (manifest){
-        if (manifest.templates) {
-            $.ajax(manifest.templates)
-            .done(function(data){
-                for( var pkg in manifest.packages) {
-                    var package = manifest.packages[pkg];
-                    $(package.destination).html($(data).filter(package.source).text());
-                }
-            });
-        }
-    }
-    var path = unescape(document.location.pathname).split('/'),        
-        design   = "hatch",                    ///path[3],
-        db   = $.couch.db("proto-tour");             
-         //$.couch.db(path[1]);  //$.couch.db(document.location.hostname);  
-    
+
+     // make it a couchform
+     $('#newLocation').couchForm({
+         beforeSave : function(doc) {
+             doc.lat=currentLat;
+             doc.lng=currentLng;
+             doc.created_at = new Date();
+             return doc;
+         }
+     });
+                     
     function contentUpdate (){
         if (current_click_script){
             load_hash(current_click_script);                     
@@ -38,17 +46,27 @@ jQuery(document).ready(function() {
             changeHandler.onChange(contentUpdate);
         }
     }
-    
+
+    var locationsLoaded = function (this_hash,data){
+        $(this_hash.destination).html(data);
+        $('i.row-delete').unbind('click');
+        $('i.row-delete').click(function (event) { 
+            event.preventDefault();
+            var thisDOC = $(this).closest('tr');
+            db.removeDoc({   _id: thisDOC.attr('id'),
+                            _rev: thisDOC.data('rev')})
+            }
+        );
+    };
+
     var hash_router = {
-        "gathered": {
-            "title": "Egg Production",
-            "list": "bootstrap_table",
-            "view": "gathered",
-            "destination": "#main-content",
-            "newrecord_template": "#egg-count",
-            "load_function":false,
-            "ajax_data":{ descending : false ,reduce:false},
-            "side_bar": "gathered_stat"
+        "locations": {
+            "title": "Saved Locations",
+            "list": "jqm_table",
+            "view": "locations",
+            "destination": "#locationTable",
+            "load_function":locationsLoaded,
+            "ajax_data":{ descending : false ,reduce:false}
         }
     };
 
@@ -76,10 +94,12 @@ jQuery(document).ready(function() {
               })
             .done( function(data) {
                   setupChanges(data.update_seq);
+                  current_click_script=hash;
+                  
                   if (this_hash.load_function){
                       this_hash.load_function(this_hash,data);
                   } else{
-                      $(this_hash.destination).html(data);              
+                      $(this_hash.destination).html(data);
                   }
                   dfd.resolve();
               }
@@ -95,8 +115,12 @@ jQuery(document).ready(function() {
 // 
     var goodPositionChange = function(pos) {
       var crd = pos.coords;
-      $("#currentLat").text(crd.latitude);
-      $("#currentLng").text(crd.longitude);
+      currentLat=crd.latitude;
+      currentLng=crd.longitude;
+      
+      posHTML="Lat: "+currentLat+"</br>Lng: "+currentLng;
+      
+      $("#currentPos").html(posHTML);
     };
 
     var badPositionChange = function (err) {
@@ -107,16 +131,16 @@ jQuery(document).ready(function() {
       latitude : 0,
       longitude: 0,
     }
-
     options = {
       enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
     };
 
     id = navigator.geolocation.watchPosition(goodPositionChange, badPositionChange, options);
  
- 
+$("#locationPage").on("pageshow",function(){
+    load_hash('locations');  
+});
+
  
     
 });

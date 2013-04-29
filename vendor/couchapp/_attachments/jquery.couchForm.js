@@ -4,7 +4,7 @@
     $.fn.couchForm = function(opts) {
         opts = opts || {};
         if (!opts.db) {
-            opts.db = $.couch.db("notaries");            
+            opts.db = $.couch.db("tour");            
            //opts.db = $.couch.db(document.location.pathname.split('/')[1]);
             
         }

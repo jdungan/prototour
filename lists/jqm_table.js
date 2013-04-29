@@ -8,28 +8,33 @@ function(head, req) {
     var row=getRow();
     
     if (row){
+
         for (var p in row.value){
             if (p.charAt(0)!='_'){
                 if (p.charAt(0)==p.charAt(0).toUpperCase()){
                     // all fieldnames with uppercase first char
-                    must_temp+='<td class="field_value" name='+p+'>{{'+p+'}}</td>';
                     header_row+='<th class="field_header">'+p+'</th>';
+                    must_temp+='<td class="field_value" name='+p+'>{{'+p+'}}</td>';
                 }
             }
         }
-        must_temp  += '</tr>';
-        header_row += '<th id="util_col"></th></tr>';//last field for sort and edit buttons    
-
-        send('<table class="table table-striped">');
-
-        send(header_row);
-
+        
+        header_row += '<th id="util_col"></th></tr>';//last field for delete button   
+        
+        var delText='<i class="icon-remove-circle row-delete icon-2x"></i>';
+        must_temp  += '<td>'+delText+'</td></tr>';
+        
+        send("<table data-role='table' id='jqm-table' data-mode='reflow' class='ui-responsive table-stroke ui-table'>");
+        
+        send("<thead>"+header_row+"</thead>");
+        send("<tbody>");
         do {
             send(Mustache.render(must_temp,row.value));            
         } while (row = getRow());
 
-        send('</table>');
+        send('</tbody></table>');
                 
     }
 };
+
  

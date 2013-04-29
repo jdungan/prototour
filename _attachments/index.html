@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta name="description" content="proto-tour">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		
+		<!-- FontAwesome - http://fortawesome.github.io/Font-Awesome/ -->
+      <link rel="stylesheet" href="css/font-awesome.min.css" />
+
+		<!-- jQueryMobileCSS - original without styling -->
+      <link rel="stylesheet" href="css/jquerymobile.css" />
+
+		<!-- nativeDroid core CSS -->
+      <link rel="stylesheet" href="css/jquerymobile.nativedroid.css" />
+
+		<!-- nativeDroid: Light/Dark -->
+      <link rel="stylesheet" href="css/jquerymobile.nativedroid.dark.css"  id='jQMnDTheme' />
+
+		<!-- nativeDroid: Color Schemes -->
+      <link rel="stylesheet" href="css/jquerymobile.nativedroid.color.green.css" id='jQMnDColor' />
+
+
+
+
+
+    <title>proto-tour</title>
+    <link href="css/extras.css" rel="stylesheet">
+
+	<!-- jQuery / jQueryMobile Scripts -->
+    <script src="vendor/couchapp/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+    <script src="vendor/couchapp/jquery.couch.js"></script> 
+    <script src="vendor/couchapp/jquery.couchForm.js"></script>
+    <script src="vendor/couchapp/jquery.mustache.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+  </head>
+  <body>
+
+        <div id="home-page" data-role="page" data-theme='b'>
+                <div data-role="header" data-position="fixed"  data-theme="b" role="banner">
+                    <h1 class="ui-title" >
+                        Proto Tour
+                    </h1>
+                </div>
+                <ul class="tour-options" data-role="listview">
+                    <li>
+                        <p>Current Position:</p>
+                        <div id="currentPos"></div>
+                    </li>
+
+                    <li>
+                        <a href='#popupDialog' data-role="button">
+                            <i class="icon-pushpin icon-2x"></i>
+                        Add a Location</a>
+                    </li>
+                    <li>                
+                        <a href="#locationPage" data-role="button">
+                            <i class="icon-list icon-2x"></i>Saved Locations</a>
+                    </li>
+                    <li>                
+                        <a href="#mapPage" data-role="button">
+                            <i class="icon-globe icon-4x"></i>Find Yourself</a>
+                    </li>            
+
+
+
+
+                </ul>
+                
+        </div>
+        
+         <div data-role='page' id='popupDialog' data-theme='b'>
+          <div data-role='header' data-theme='b'>
+           <h1>Save this location?</h1>
+          </div>
+          <div data-role='content' data-theme='b'>
+           <p>Give this place a name.</p>
+            
+            <form id="newLocation" class="form-inline">
+                <input name="recType" type="hidden" value="location">
+                <input name="Name" class="input-small" type="text" placeholder="Name...">
+
+            </form>
+                        
+            <div class='showastabs center nobg'>
+                <a id="saveLocation" href='#' data-rel='back' data-icon='ok' data-iconpos='left' data-role='button' data-inline='true'>Okay</a>
+                <a href='#' data-rel='back' data-icon='delete' data-iconpos='left' data-role='button' data-inline='true'>Cancel</a>
+            </div>
+            
+          </div>
+         </div>  
+    
+         <div data-role='page' class="ui-page ui-body-b" id="locationPage" data-theme='b'>
+             <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed slidedown" role="banner">
+                         <a href="index.html" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+                         <h1 class="ui-title" role="heading" aria-level="1">Locations</h1>
+                     </div>
+            <div id='locationTable' data-role="content" class="ui-content" role="main">
+            </div>         
+                             
+             
+        </div>
+        
+        <div data-role='page' id="mapPage" data-theme='b'>
+             <div data-role='header' data-theme='b'>
+              <h1>Here you are.</h1>
+             </div>           
+            <div id="map_content"
+                 data-role="content" 
+                 data-theme="a"
+                 style="height:100%; width:100%;">
+
+            </div>
+            
+
+        </div>
+        
+    
+    
+    
+  </body>
+</html>
