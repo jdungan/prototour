@@ -24,7 +24,7 @@ function(head, req) {
         var delText='<i class="icon-remove-circle row-delete icon-2x"></i>';
         must_temp  += '<td>'+delText+'</td></tr>';
         
-        send("<table data-role='table' id='jqm-table' data-mode='reflow' class='ui-responsive table-stroke ui-table'>");
+        send("<table data-role='table' data-mode='reflow' class='ui-responsive table-stroke ui-table'>");
         
         send("<thead>"+header_row+"</thead>");
         send("<tbody>");

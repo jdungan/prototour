@@ -21,55 +21,79 @@
       <link rel="stylesheet" href="css/jquerymobile.nativedroid.color.green.css" id='jQMnDColor' />
 
 
-
-
+      <link rel="stylesheet"  href="css/extras.css" rel="stylesheet">
 
     <title>proto-tour</title>
-    <link href="css/extras.css" rel="stylesheet">
-
-	<!-- jQuery / jQueryMobile Scripts -->
-    <script src="vendor/couchapp/jquery-1.8.2.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
-
-    <script src="vendor/couchapp/jquery.couch.js"></script> 
-    <script src="vendor/couchapp/jquery.couchForm.js"></script>
-    <script src="vendor/couchapp/jquery.mustache.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+ <!-- http://nativedroid.godesign.ch/
+ http://timeago.yarp.com/
+ font awesome
+ 
+  -->
 
   </head>
   <body>
 
-        <div id="home-page" data-role="page" data-theme='b'>
+        <div id="menuPage" data-role="page" data-theme='b'>
                 <div data-role="header" data-position="fixed"  data-theme="b" role="banner">
                     <h1 class="ui-title" >
-                        Proto Tour
+                        <i class="icon-map-marker">&nbsp;Proto Tour</i>
                     </h1>
                 </div>
                 <ul class="tour-options" data-role="listview">
-                    <li>
-                        <p>Current Position:</p>
-                        <div id="currentPos"></div>
+                    <li>                
+                        <a href="#directionsPage" data-role="button">
+                            <i class="icon-mobile-phone icon-2x"></i>&nbsp;Directions</a>
                     </li>
+
+                    <li>                
+                        <a href="#detailsPage" data-role="button">
+                            <i class="icon-dashboard icon-2x"></i>&nbsp;watchPosition</a>
+                    </li>            
+                    <li>                
+                        <a href="#mapPage" data-role="button">
+                            <i class="icon-globe icon-2x"></i>&nbsp;Find Yourself</a>
+                    </li>            
 
                     <li>
                         <a href='#popupDialog' data-role="button">
-                            <i class="icon-pushpin icon-2x"></i>
-                        Add a Location</a>
+                            <i class="icon-pushpin icon-2x"></i>&nbsp;Add a Location</a>
                     </li>
                     <li>                
                         <a href="#locationPage" data-role="button">
-                            <i class="icon-list icon-2x"></i>Saved Locations</a>
+                            <i class="icon-list icon-2x"></i>&nbsp;Saved Locations</a>
                     </li>
-                    <li>                
-                        <a href="#mapPage" data-role="button">
-                            <i class="icon-globe icon-4x"></i>Find Yourself</a>
-                    </li>            
-
-
-
 
                 </ul>
                 
+        </div>
+        
+        <div data-role='page' class="ui-page ui-body-b" id="detailsPage" data-theme='b'>
+            <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed" role="banner">
+                <a data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+                <h1 class="ui-title" role="heading" aria-level="1">watchPosition Details</h1>
+            </div>
+
+            <div id='currentPos' data-role="content" class="ui-content" role="main">
+                <div>Waiting for position data...</div>
+            </div>         
+
+        </div>
+        
+        <div data-role='page' class="ui-page ui-body-b" id="directionsPage" data-theme='b'>
+            <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed" role="banner">
+                <a data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+                <h1 class="ui-title" role="heading" aria-level="1">Directions</h1>
+            </div>
+
+            <div id='currentPos' data-role="content" class="ui-content" role="main">
+                <div id="eAlpha">Waiting for direction ... </div>
+                <div id="goalDistance">Calculating distance ...</div>
+                <div class="n">N<br><br><br><br>S</div>
+                <div class="pointer"></div>
+
+
+            </div>         
+
         </div>
         
          <div data-role='page' id='popupDialog' data-theme='b'>
@@ -94,9 +118,9 @@
          </div>  
     
          <div data-role='page' class="ui-page ui-body-b" id="locationPage" data-theme='b'>
-             <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed slidedown" role="banner">
-                         <a href="index.html" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
-                         <h1 class="ui-title" role="heading" aria-level="1">Locations</h1>
+             <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed" role="banner">
+                         <a data-rel="back" href="#" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+                         <h1 class="ui-title" role="heading" aria-level="1">Saved Locations</h1>
                      </div>
             <div id='locationTable' data-role="content" class="ui-content" role="main">
             </div>         
@@ -104,20 +128,36 @@
              
         </div>
         
-        <div data-role='page' id="mapPage" data-theme='b'>
-             <div data-role='header' data-theme='b'>
-              <h1>Here you are.</h1>
-             </div>           
+        <div data-role='page' class="ui-page ui-body-b" id="mapPage" data-theme='b'class="ui-header ui-bar-b ui-header-fixed" role="banner">
+            <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed slidedown" role="banner">
+                 <a data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+                 <h1 class="ui-title" role="heading" aria-level="1">Here you are.</h1>
+            </div>           
             <div id="map_content"
+                 class="ui-content" 
+                 role="main"
                  data-role="content" 
-                 data-theme="a"
-                 style="height:100%; width:100%;">
+                 data-theme="b"
 
             </div>
-            
-
-        </div>
         
+        </div> <!-- end of page -->        
+        
+
+    	<!-- jQuery / jQueryMobile Scripts -->
+        <script src= "vendor/couchapp/jquery-1.8.2.min.js"></script>
+        <script src= "http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+        
+        <script type="text/javascript"  src="http://maps.google.com/maps/api/js?key=AIzaSyBIN_IsvlHoxb6QQtIhB1OjisrFuuCixAQ&libraries=geometry&sensor=false"></script>
+        
+        <script src= "vendor/couchapp/jquery.couch.js"></script> 
+        <script src= "vendor/couchapp/jquery.couchForm.js"></script>
+        <script src= "vendor/couchapp/jquery.mustache.js"></script>
+        
+        <script type="text/javascript" src="js/jquery.timeago.js"></script>
+        <script type="text/javascript" src="js/markerwithlabel.js"></script>
+        <script type="text/javascript" src="js/tour_map.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
     
     
     

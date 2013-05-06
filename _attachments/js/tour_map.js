@@ -1,11 +1,33 @@
+
+var tulsa_styles=[
+  {
+    "featureType": "landscape",
+    "stylers": [
+      { "invert_lightness": true }
+    ]
+  },{
+    "featureType": "road",
+    "stylers": [
+      { "invert_lightness": true },
+      { "lightness": 48 },
+      { "gamma": 0.8 },
+      { "color": "#808080" }
+    ]
+  },{
+    "featureType": "poi.park",
+    "elementType": "geometry"  },{
+  }
+]
+
+
 // tfdd map 
-var tfdd_map= function (element) {    
+var tulsa_map= function (element) {    
     // 'tulsa 36.1539,-95.9925'
         
         var map_element = null,
         tulsaLatlng =  tulsaLatlng ||  new google.maps.LatLng(36.1539,-95.9925),
         dispatchMapOptions = {
-            zoom: 16,
+            zoom: 19,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             center:tulsaLatlng,
 
@@ -34,8 +56,6 @@ var tfdd_map= function (element) {
         map_element = element;
         
         this.map = new google.maps.Map(element, dispatchMapOptions);        
-        this.map.dispatch = new dispatch(this.map);
-        this.map.hydrants = new hydrant_set(this.map);
     }
 
     return this.map;
