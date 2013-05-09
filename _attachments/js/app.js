@@ -1,24 +1,39 @@
 jQuery(document).ready(function() {
 // watch position functions
 
+
+
+        var objectasTable = function (obj,DOMid){
+            
+            
+            
+            var tableHTML="<table data-role='table' id='"+DOMid+"' data-mode='reflow' class='ui-responsive table-stroke ui-table'>\
+            <thead><tr><td>Property</td><td>Value</td></tr></thead>";
+            tableHTML+=""
+            for (var p in obj){
+                tableHTML+="<tr><td>"+p+"</td><td>"+obj[p]+"</td></tr>"        
+            };
+            tableHTML+="</table>"
+            
+            return tableHTML
+        }
+
+
+
         var goodPositionChange = function(pos) {
           var crd = pos.coords;
 
           currentLatlng = new google.maps.LatLng(crd.latitude, crd.longitude);
 
-
           //update details table
           
-          var posHTML="<table data-role='table' id='watchpositiondetails' data-mode='reflow' class='ui-responsive table-stroke ui-table'>\
-          <thead><tr><td>Property</td><td>Value</td></tr></thead>";
-          posHTML+="<tr><td>timestamp</td><td><abbr class='timeago' title='"+(new Date(pos.timestamp)).toISOString()+"'>"+Date(pos.timestamp)+"</abbr></td></tr>"
-
-          for (var p in crd){
-              posHTML+="<tr><td>"+p+"</td><td>"+crd[p]+"</td></tr>"        
-          };
-          posHTML+="</table>"
+          $("#currentPos").html(objectasTable(crd,"watchpositionTable"));
+          
+          timerow="<tr><td>timestamp</td><td><abbr class='timeago' title='"+(new Date(pos.timestamp)).toISOString()+"'>"+Date(pos.timestamp)+"</abbr></td></tr>"
            
-          $("#currentPos").html(posHTML);
+          $('#watchpositionTable thead').append(timerow)
+          
+      
           $("#detailsPage").trigger( "updatelayout" )
           $("abbr.timeago").timeago();
           
@@ -246,37 +261,91 @@ jQuery(document).ready(function() {
         google.maps.event.trigger(ttown, 'resize');
         ttown.setCenter(currentLatlng);
     });   
+
+    $("#watchPositionPage").on("pageshow",function(){
+        $("#detailsPage").trigger( "updatelayout" )
+         
+    });
+
+//device orientation page
+    var devicetimestamp;
+    
+    var devicepagemovement = function (e) {
+        devicetimestamp= devicetimestamp ||e.timeStamp;
+        if (e.timeStamp-devicetimestamp>500){
+            $("#deviceorientationEvent").html(objectasTable(e));
+            devicetimestamp=e.timeStamp;
+        }
+      };
+    
+    $("#deviceorientationPage").on("pageinit",function(){
+        if (window.DeviceOrientationEvent) {
+          window.addEventListener("deviceorientation", devicepagemovement,false);
+      }
+    });
+    $("#deviceorientationPage").on("pagebeforehide",function(){
+          window.removeEventListener('deviceorientation', devicepagemovement, false);
+    });
+    
+    
+    
 //wayfinding
 
-currentGoal  = currentGoal || new google.maps.LatLng(36.1539,-95.9925),
+var currentGoal  = currentGoal || new google.maps.LatLng(36.032561757831566,-95.94065908661337);
 
 
 
   var rotate = function (deg) {  
-      $(".n").css({ "-moz-transform": "rotate(0deg)"});
-      $(".n").css({ "-moz-transform": "rotate(" + deg + "deg)"});
+      $(".pointer").css({ "-moz-transform": "rotate(0deg)"});
+      $(".pointer").css({ "-moz-transform": "rotate(" + deg + "deg)"});
     
-      $(".n").css({ "-o-transform": "rotate(0deg)"});
-      $(".n").css({ "-o-transform": "rotate(" + deg + "deg)"});
+      $(".pointer").css({ "-o-transform": "rotate(0deg)"});
+      $(".pointer").css({ "-o-transform": "rotate(" + deg + "deg)"});
     
-      $(".n").css({ "-ms-transform": "rotate(0deg)"});
-      $(".n").css({ "-ms-transform": "rotate(" + deg + "deg)"});
+      $(".pointer").css({ "-ms-transform": "rotate(0deg)"});
+      $(".pointer").css({ "-ms-transform": "rotate(" + deg + "deg)"});
     
-      $(".n").css({ "-webkit-transform": "rotate(0deg)"});
-      $(".n").css({ "-webkit-transform": "rotate(" + deg + "deg)"});
+      $(".pointer").css({ "-webkit-transform": "rotate(0deg)"});
+      $(".pointer").css({ "-webkit-transform": "rotate(" + deg + "deg)"});
     
-      $(".n").css({ "transform": "rotate(0deg)"});
-      $(".n").css({ "transform": "rotate(" + deg + "deg)"});
+      $(".pointer").css({ "transform": "rotate(0deg)"});
+      $(".pointer").css({ "transform": "rotate(" + deg + "deg)"});
   };
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener("deviceorientation", function (e) {
-      rotate(360 - e.alpha);
-      $("#eAlpha")text(360 - e.alpha);
-      
-      
-    }, false);
-  }
+ 
+  var lasttimestamp;
   
+  var directionpagemovement = function (e) {
+      lasttimestamp= lasttimestamp ||e.timeStamp;
+      if (e.timeStamp-lasttimestamp>100){
+          rotate(360 - e.alpha);
+          newheading= geo.computeHeading(currentLatlng,currentGoal);
+
+
+
+          goalDistance= geo.computeDistanceBetween(currentLatlng,currentGoal);
+          dirHTML="<div>e.alpha: "+e.alpha+"</div></br>"
+          dirHTML+="<div>e.beta: "+e.beta+"</div></br>"
+          dirHTML+="<div>e.gamma: "+e.gamma+"</div></br>"
+
+          dirHTML+="<div>heading: "+newheading+"</div></br>"
+          dirHTML+="<div>Distance: "+goalDistance+"</div></br>"
+          $("#eAlpha").html(dirHTML);
+          lasttimestamp=e.timeStamp;
+      }
+    };
+ 
+ 
+  
+  $("#directionsPage").on("pageinit",function(){
+      if (window.DeviceOrientationEvent) {
+        window.addEventListener("deviceorientation", directionpagemovement,false);
+    }
+    
+    
+  });
+  $("#directionsPage").on("pagebeforehide",function(){
+        window.removeEventListener('deviceorientation', directionpagemovement, false);
+  });
   
 // start watching position
 var positionWatchID = positionWatchID || navigator.geolocation.watchPosition(goodPositionChange, badPositionChange, options);

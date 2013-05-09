@@ -4,6 +4,7 @@
       <meta charset="utf-8">
       <meta name="description" content="proto-tour">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
 		
 		<!-- FontAwesome - http://fortawesome.github.io/Font-Awesome/ -->
       <link rel="stylesheet" href="css/font-awesome.min.css" />
@@ -46,9 +47,15 @@
                     </li>
 
                     <li>                
-                        <a href="#detailsPage" data-role="button">
+                        <a href="#watchPositionPage" data-role="button">
                             <i class="icon-dashboard icon-2x"></i>&nbsp;watchPosition</a>
                     </li>            
+
+                    <li>                
+                        <a href="#deviceorientationPage" data-role="button">
+                            <i class="icon-screenshot icon-2x"></i>&nbsp;DeviceOrientation</a>
+                    </li>            
+
                     <li>                
                         <a href="#mapPage" data-role="button">
                             <i class="icon-globe icon-2x"></i>&nbsp;Find Yourself</a>
@@ -67,9 +74,25 @@
                 
         </div>
         
-        <div data-role='page' class="ui-page ui-body-b" id="detailsPage" data-theme='b'>
-            <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed" role="banner">
-                <a data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+        <div id="watchPositionPage"
+             data-role='page' 
+             class="ui-page ui-body-b"  
+             data-theme='b'>
+            <div data-role="header" 
+                 data-position="fixed" 
+                 data-theme="b" 
+                 class="ui-header ui-bar-b ui-header-fixed" 
+                 role="banner">
+                
+                <a href="index.html"
+                   data-ajax="false" 
+                   class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" 
+                   data-corners="true"
+                   data-shadow="true" 
+                   data-iconshadow="true" 
+                   data-wrapperels="span" 
+                   data-theme="b">
+                  <span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
                 <h1 class="ui-title" role="heading" aria-level="1">watchPosition Details</h1>
             </div>
 
@@ -79,17 +102,71 @@
 
         </div>
         
-        <div data-role='page' class="ui-page ui-body-b" id="directionsPage" data-theme='b'>
-            <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed" role="banner">
-                <a data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+        <div id="directionsPage" 
+             class="ui-page ui-body-b" 
+             data-role='page' data-theme='b'>
+            <div class="ui-header ui-bar-b ui-header-fixed"
+                 role="banner"
+                 data-role="header" 
+                 data-position="fixed"
+                 data-theme="b" 
+                 >
+                <a href="index.html"
+                   class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" 
+                   data-rel="back" 
+                   data-ajax="false" 
+                   data-corners="true"
+                   data-shadow="true"
+                   data-iconshadow="true"
+                   data-wrapperels="span"
+                   data-theme="b">
+                   <span class="ui-btn-inner">
+                       <span class="ui-btn-text">
+                           <i class="icon-angle-left"></i>
+                       </span>
+                  </span></a>
                 <h1 class="ui-title" role="heading" aria-level="1">Directions</h1>
             </div>
 
-            <div id='currentPos' data-role="content" class="ui-content" role="main">
-                <div id="eAlpha">Waiting for direction ... </div>
-                <div id="goalDistance">Calculating distance ...</div>
-                <div class="n">N<br><br><br><br>S</div>
+            <div id='currentPos'
+                 data-role="content" class="ui-content" role="main">
+                <div id="eAlpha">Waiting for sensor data ... </div>
                 <div class="pointer"></div>
+
+
+            </div>         
+
+        </div>
+
+        <div id="deviceorientationPage" 
+             class="ui-page ui-body-b" 
+             data-role='page' data-theme='b'>
+            <div class="ui-header ui-bar-b ui-header-fixed"
+                 role="banner"
+                 data-role="header" 
+                 data-position="fixed"
+                 data-theme="b" 
+                 >
+                <a href="index.html"
+                   class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" 
+                   data-rel="back" 
+                   data-ajax="false" 
+                   data-corners="true"
+                   data-shadow="true"
+                   data-iconshadow="true"
+                   data-wrapperels="span"
+                   data-theme="b">
+                   <span class="ui-btn-inner">
+                       <span class="ui-btn-text">
+                           <i class="icon-angle-left"></i>
+                       </span>
+                  </span></a>
+                <h1 class="ui-title" role="heading" aria-level="1">DeviceOrientationEvent</h1>
+            </div>
+
+            <div id='currentPos'
+                 data-role="content" class="ui-content" role="main">
+                <div id="deviceorientationEvent">Waiting for sensor data ... </div>
 
 
             </div>         
@@ -119,9 +196,24 @@
     
          <div data-role='page' class="ui-page ui-body-b" id="locationPage" data-theme='b'>
              <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed" role="banner">
-                         <a data-rel="back" href="#" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
-                         <h1 class="ui-title" role="heading" aria-level="1">Saved Locations</h1>
-                     </div>
+                 <a 
+                      href="index.html"
+                      data-rel="back" 
+                      data-ajax="false" 
+                      class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" 
+                      data-corners="true" 
+                      data-shadow="true" 
+                      data-iconshadow="true" 
+                      data-wrapperels="span" 
+                      data-theme="b">
+                      <span class="ui-btn-inner">
+                          <span class="ui-btn-text">
+                              <i class="icon-angle-left"></i>
+                          </span>
+                      </span>
+                  </a>
+                 <h1 class="ui-title" role="heading" aria-level="1">Saved Locations</h1>
+             </div>
             <div id='locationTable' data-role="content" class="ui-content" role="main">
             </div>         
                              
@@ -130,7 +222,7 @@
         
         <div data-role='page' class="ui-page ui-body-b" id="mapPage" data-theme='b'class="ui-header ui-bar-b ui-header-fixed" role="banner">
             <div data-role="header" data-position="fixed"data-theme="b" class="ui-header ui-bar-b ui-header-fixed slidedown" role="banner">
-                 <a data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
+                 <a href="index.html" data-rel="back" data-ajax="false" class="ui-btn-left ui-btn ui-btn-up-b ui-shadow ui-btn-corner-all" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"><span class="ui-btn-inner"><span class="ui-btn-text"><i class="icon-angle-left"></i></span></span></a>
                  <h1 class="ui-title" role="heading" aria-level="1">Here you are.</h1>
             </div>           
             <div id="map_content"
