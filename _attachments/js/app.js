@@ -129,11 +129,20 @@ jQuery(document).ready(function() {
       strokeWeight: 1
     };
 
+    // icon:{
+    //     anchor: (0,0),
+    //     path:viewport,
+    //     scale:.05,
+    //     fillOpacity:1,
+    //     fillColor:"blue",
+    //     strokeColor:"black",
+    //     strokeOpacity:.3
+    // }
 
 
     var user_marker = user_marker || new google.maps.Marker({
         map: ttown,
-        visible:false
+        visible:false,
     });
 
 // user circle
@@ -256,11 +265,6 @@ jQuery(document).ready(function() {
         route_view('locations');  
     });
 
-    $("#mapPage").on("pageshow",function(){
-        route_view('locations');  
-        google.maps.event.trigger(ttown, 'resize');
-        ttown.setCenter(currentLatlng);
-    });   
 
     $("#watchPositionPage").on("pageshow",function(){
         $("#detailsPage").trigger( "updatelayout" )
@@ -291,8 +295,8 @@ jQuery(document).ready(function() {
     
 //wayfinding
 
-var currentGoal  = currentGoal || new google.maps.LatLng(36.032561757831566,-95.94065908661337);
-
+var currentGoal  = currentGoal || new google.maps.LatLng(36.159598343107994,-95.99202250139416);
+ 
 
 
   var rotate = function (deg) {  
@@ -317,13 +321,10 @@ var currentGoal  = currentGoal || new google.maps.LatLng(36.032561757831566,-95.
   var directionpagemovement = function (e) {
       lasttimestamp= lasttimestamp ||e.timeStamp;
       if (e.timeStamp-lasttimestamp>100){
-          rotate(360 - e.alpha);
           newheading= geo.computeHeading(currentLatlng,currentGoal);
-
-
-
+          rotate(newheading-(360-e.alpha));
           goalDistance= geo.computeDistanceBetween(currentLatlng,currentGoal);
-          dirHTML="<div>e.alpha: "+e.alpha+"</div></br>"
+          dirHTML ="<div>e.alpha: "+e.alpha+"</div></br>"
           dirHTML+="<div>e.beta: "+e.beta+"</div></br>"
           dirHTML+="<div>e.gamma: "+e.gamma+"</div></br>"
 
@@ -334,10 +335,19 @@ var currentGoal  = currentGoal || new google.maps.LatLng(36.032561757831566,-95.
       }
     };
  
+    $("#mapPage").on("pageshow",function(){
+        route_view('locations');  
+        google.maps.event.trigger(ttown, 'resize');
+        ttown.setCenter(currentLatlng);
+        window.addEventListener("deviceorientation", directionpagemovement,false);
+
+    });   
  
   
   $("#directionsPage").on("pageinit",function(){
+      
       if (window.DeviceOrientationEvent) {
+         
         window.addEventListener("deviceorientation", directionpagemovement,false);
     }
     

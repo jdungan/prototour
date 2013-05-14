@@ -30,7 +30,7 @@ var tulsa_map= function (element) {
             zoom: 19,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             center:tulsaLatlng,
-
+            styles:tulsa_styles,
             panControl: false,
             scaleControl: false,
             overviewMapControl: false,
