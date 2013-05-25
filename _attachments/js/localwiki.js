@@ -2,6 +2,9 @@
 var localwiki = (function () {
     var wiki = {},
         options={};
+        
+    // set default url
+    options.url=options.url || 'www.tulsawiki.com'
     
     wiki.url = function (url){
         if (url){
@@ -14,7 +17,6 @@ var localwiki = (function () {
         if (resource_uri){
             options.current_page=resource_uri;                
         }
-        
         return options.current_page;        
     };
     
@@ -52,10 +54,16 @@ var localwiki = (function () {
         });
     };
     
-    wiki.page = function (resource_uri,callback,params){
-        wikiapi(resource_uri).done(function(data){
-           callback(data); 
-        });
+    wiki.page = function(resource_uri, callback, params) {
+        wikiapi(resource_uri)
+            .done(function(data) {
+                //fully qualify src with url
+                if (data.content.indexOf("src=")){
+                    var src = data.content.split('src="');
+                    data.content = src.join('src="http://' + options.url + '/' + data.name + '/');
+                }
+                callback(data);
+            });
     };
 
     wiki.tags = function (callback,params){
@@ -70,17 +78,27 @@ var localwiki = (function () {
         });
     };
 
+    wiki.map = function(resource,callback) {
+
+        if (resource){
+            wikiapi(resource).done(function(data){
+               callback(data); 
+            });
+        }
+    };
+
     wiki.next = function (resource,caller,callback){
         var dfd = new $.Deferred();
-        
-        wikiapi(resource)
-            .done( function(data) {
-                  dfd.resolve(caller,data);
-            })
-            .fail( function(data) {
-                  dfd.reject();
-            })
-        ;
+        if (resource){
+            wikiapi(resource)
+                .done( function(data) {
+                      dfd.resolve(caller,data);
+                })
+                .fail( function(data) {
+                      dfd.reject();
+                })
+            ;
+        }
         return dfd.promise();
     };
     

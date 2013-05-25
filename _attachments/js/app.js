@@ -81,7 +81,6 @@ jQuery(document).ready(function() {
     };
     var view_router = {};
 
-
     var route_view = function (hash){
         var dfd = new $.Deferred();
         var this_hash=view_router[hash],
@@ -340,7 +339,7 @@ var currentGoal  = currentGoal || new google.maps.LatLng(36.159598343107994,-95.
         google.maps.event.trigger(ttown, 'resize');
         ttown.setCenter(currentLatlng);
         window.addEventListener("deviceorientation", directionpagemovement,false);
-
+ 
     });   
  
   

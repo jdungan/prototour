@@ -17,7 +17,7 @@ var tulsa_styles=[
     "featureType": "poi.park",
     "elementType": "geometry"  },{
   }
-]
+];
 
 
 // tfdd map 
@@ -27,10 +27,10 @@ var tulsa_map= function (element) {
         var map_element = null,
         tulsaLatlng =  tulsaLatlng ||  new google.maps.LatLng(36.1539,-95.9925),
         dispatchMapOptions = {
+            visualRefresh:true,
             zoom: 19,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             center:tulsaLatlng,
-            styles:tulsa_styles,
             panControl: false,
             scaleControl: false,
             overviewMapControl: false,

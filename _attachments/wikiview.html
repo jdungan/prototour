@@ -3,8 +3,8 @@
   <head>
       <meta charset="utf-8">
       <meta name="description" content="proto-tour">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<meta name="apple-mobile-web-app-capable" content="yes">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	  <meta name="apple-mobile-web-app-capable" content="yes">
 		
 		<!-- FontAwesome - http://fortawesome.github.io/Font-Awesome/ -->
       <link rel="stylesheet" href="css/font-awesome.min.css" />
@@ -39,7 +39,7 @@
               </div>
                 <ul class="tour-options" data-role="listview">
                     <li>
-                        <a href='#pages' class="ui-link"><i class="icon-copy icon-2x"></i>Pages</a>
+                        <a href='#pages' class="ui-link"><i class="icon-copy icon-2x pull-left"></i>Pages</a>
                     </li>
                     <li>
                         <a href='#tags' class="ui-link"><i class="icon-tags icon-2x pull-left"></i>Tags</a>
@@ -83,7 +83,7 @@
         <div id="page_detail" data-role="page" data-theme='b'>
             <div data-role="header" data-position="fixed"  data-theme="b" role="banner">
                 <a href="#menu" ><i class="icon-home"></i></a>
-                <h1 class="ui-title" >
+                <h1 id="page_title" class="ui-title" >
                 Details
                 </h1>
             </div>
@@ -124,6 +124,12 @@
                   <li>Icons by:
                       <a class="ui-link" href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
                   </li>
+                  <li>GeoJSON to Google Maps Help:
+                      <a class="ui-link" href="https://github.com/JasonSanford/GeoJSON-to-Google-Maps.git">JasonSanford/GeoJSON-to-Google-Maps</a>
+                  </li>
+                  <li>And, of course, jquery and jquerymobile goodness!
+                  </li>
+                  
                   
                  <!--                   http://timeago.yarp.com/
                                    --> 
@@ -137,20 +143,26 @@
         <script type="text/javascript"  src="http://maps.google.com/maps/api/js?key=AIzaSyBIN_IsvlHoxb6QQtIhB1OjisrFuuCixAQ&libraries=geometry&sensor=false"></script>
         <script type="text/javascript" src="js/jquery.timeago.js"></script>
         <script type="text/javascript" src="js/markerwithlabel.js"></script>
-
+        <script type="text/javascript" src="js/tour_map.js"></script>
+        <script type="text/javascript" src="js/GeoJSON.js"></script>
         <script type="text/javascript" src="js/localwiki.js"></script>
     
 <script>
+$(document).ready(function() {
     
     // must set the url before anything else can happen
     localwiki.url("www.tulsawiki.org");
+
+    //build a map
+    
+
     
     //helper funcions
     var objectas_listitems = function (obj){
         var
         li_html="";
         for (var p in obj){
-            li_html+="<li><strong>"+p+"</strong>:&nbsp;"+obj[p]+"</li>"        
+            li_html+="<li id='"+p+"'><strong>"+p+"</strong>:&nbsp;"+obj[p]+"</li>"        
         };
         return li_html;
     };
@@ -212,10 +224,31 @@
                 $.mobile.loading('hide');
             });            
     };
+
+    var findBounds = function (arrayLatlng){        
+        var maxN=maxS=arrayLatlng[0].lat();
+        var maxW=maxE=arrayLatlng[0].lng();
+
+        for (var p in arrayLatlng){
+            if (arrayLatlng[p]&&arrayLatlng[p].lat()){
+                thislat=arrayLatlng[p].lat();
+                    maxN = (thislat > maxN) ? thislat : maxN;
+                    maxS = (thislat < maxS) ? thislat : maxS;
+                    
+                thislng=arrayLatlng[p].lng()
+                    maxW = (thislng < maxW) ? thislng : maxW;
+                    maxE = (thislng > maxE) ? thislng : maxE; 
+            }
+        };
+
+        return  new google.maps.LatLngBounds(
+                new google.maps.LatLng(maxS,maxW), 
+                new google.maps.LatLng(maxN,maxE));
+        
+    };
     
     $("#site").on("pageinit",function(){
         localwiki.site(function(obj){
-            
             $("#domain").text(obj.domain);
             $("#wikilist").html(objectas_listitems(obj)).listview('refresh').trigger( "create" );
         });
@@ -223,8 +256,37 @@
     
     $("#page_detail").on("pageshow",function(){
         localwiki.page(localwiki.current_page(),function(obj){
-            liHTML=objectas_listitems(obj);
-            $("#detailist").html(liHTML).listview('refresh').trigger( "create" );      
+            $("#page_title").text(obj.name)
+            $("#detailist").html(objectas_listitems(obj)).listview('refresh').trigger( "create" );  
+            localwiki.map(obj.map, function (data) {
+                $("#detailist li:first-child").before("<li><div id=><div id='map_content' data-role='content'></div></div></li>");
+                var ttown= ttown || new tulsa_map(document.getElementById("map_content"));
+                var pointArray=[];
+                
+                geoJSONlist=data.geom.geometries;
+
+                for (var geom in geoJSONlist){
+                    var gglV = new GeoJSON(geoJSONlist[geom], {});
+                    if (gglV.error){
+                        // Handle the error.
+                    }else{
+                        gglV.setMap(ttown);
+                        if(gglV.position){
+                            pointArray.push(gglV.position);                            
+                        }
+                        if(gglV.getPaths){
+                            gglV.getPath().forEach(function(position,idx){
+                                pointArray.push(new google.maps.LatLng(position.lat(),position.lng()));                            
+                            
+                            });
+                            
+                        }
+                    }
+                    
+                }
+                ttown.fitBounds(findBounds(pointArray));
+            });
+            
         });
     });
     
@@ -236,8 +298,7 @@
             $("#pagelist").listview('refresh').trigger( "create" );  
 
         });
-    });
-    
+    });   
     
     $("#tags").on("pageinit",function(){
         localwiki.tags(function(obj){
@@ -247,8 +308,7 @@
             $("#taglist").listview('refresh').trigger( "create" );  
                             
         });
-    });
-    
+    });    
 
     $("#users").on("pageinit",function(){
         localwiki.users(function(obj){
@@ -259,7 +319,8 @@
             
         });
     });
-    
+
+});    
 </script>    
     
   </body>
